@@ -1,0 +1,11 @@
+[package]
+name = "alchemist"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = ["alchemist_macros"]
+
+[dependencies]
+alchemist_macros = { path = "alchemist_macros" }
+rand = "0.9"
