@@ -73,9 +73,23 @@ fn generate_type_expr(expr: &TypeExpr) -> proc_macro2::TokenStream {
     let name = expr.name.to_string();
 
     match name.as_str() {
-        "int" => quote! { <i32 as alchemist::Value>::generate() },
-        "uint" => quote! { <u32 as alchemist::Value>::generate() },
-        "float" => quote! { <f64 as alchemist::Value>::generate() },
+        "i8" => quote! { <i8 as alchemist::Value>::generate() },
+        "i16" => quote! { <i16 as alchemist::Value>::generate() },
+        "i32" | "int" => quote! { <i32 as alchemist::Value>::generate() },
+        "i64" => quote! { <i64 as alchemist::Value>::generate() },
+        "i128" => quote! { <i128 as alchemist::Value>::generate() },
+        "isize" => quote! { <isize as alchemist::Value>::generate() },
+
+        "u8" => quote! { <u8 as alchemist::Value>::generate() },
+        "u16" => quote! { <u16 as alchemist::Value>::generate() },
+        "u32" | "uint" => quote! { <u32 as alchemist::Value>::generate() },
+        "u64" => quote! { <u64 as alchemist::Value>::generate() },
+        "u128" => quote! { <u128 as alchemist::Value>::generate() },
+        "usize" => quote! { <usize as alchemist::Value>::generate() },
+
+        "f32" => quote! { <f32 as alchemist::Value>::generate() },
+        "f64" | "float" => quote! { <f64 as alchemist::Value>::generate() },
+
         "bool" => quote! { <bool as alchemist::Value>::generate() },
         "char" => quote! { <char as alchemist::Value>::generate() },
         "str" => quote! { <String as alchemist::Value>::generate() },
