@@ -9,3 +9,6 @@ members = ["alchemist_macros"]
 [dependencies]
 alchemist_macros = { path = "alchemist_macros" }
 rand = "0.9"
+
+[dev-dependencies]
+trybuild = "1.0"

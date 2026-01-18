@@ -24,7 +24,7 @@ macro_rules! impl_value_platform {
     };
 }
 
-pub trait Value {
+pub trait Value: std::fmt::Debug {
     fn generate() -> Self;
 }
 
