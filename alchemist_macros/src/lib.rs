@@ -1,18 +1,19 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{
-    FnArg, Ident, ItemFn, LitInt, Pat, Token, parenthesized, parse::Parse, parse::ParseStream,
+    FnArg, Ident, ItemFn, LitInt, Pat, Path, Token, parenthesized,
+    parse::{Parse, ParseStream},
     parse_macro_input,
 };
 
 struct TypeExpr {
-    name: Ident,
+    path: Path,
     inner: Option<Vec<TypeExpr>>,
 }
 
 impl Parse for TypeExpr {
     fn parse(input: ParseStream) -> syn::Result<Self> {
-        let name: Ident = input.parse()?;
+        let path: Path = input.parse()?;
 
         let inner = if input.peek(syn::token::Paren) {
             let content;
@@ -28,7 +29,7 @@ impl Parse for TypeExpr {
             None
         };
 
-        Ok(TypeExpr { name, inner })
+        Ok(TypeExpr { path, inner })
     }
 }
 
@@ -70,9 +71,12 @@ impl Parse for AlchemistArgs {
 }
 
 fn generate_type_expr(expr: &TypeExpr) -> proc_macro2::TokenStream {
-    let name = expr.name.to_string();
+    let path_str = expr.path.segments.iter()
+        .map(|s| s.ident.to_string())
+        .collect::<Vec<_>>()
+        .join("::");
 
-    match name.as_str() {
+    match path_str.as_str() {
         "i8" => quote! { <i8 as alchemist::Value>::generate() },
         "i16" => quote! { <i16 as alchemist::Value>::generate() },
         "i32" | "int" => quote! { <i32 as alchemist::Value>::generate() },
@@ -119,7 +123,10 @@ fn generate_type_expr(expr: &TypeExpr) -> proc_macro2::TokenStream {
             quote! { (#(#gens),*) }
         }
 
-        _ => panic!("Unknown type: {}", name),
+        _ => {
+            let path = &expr.path;
+            quote! { <#path as alchemist::Value>::generate()}
+        }
     }
 }
 
