@@ -146,3 +146,17 @@ fn test_path_with_builtin(rect: geometry::Rectangle, scale: i32) {
 fn test_list_of_path_type(rects: Vec<geometry::Rectangle>) {
     assert!(rects.len() <= 9);
 }
+
+#[derive(Debug)]
+struct Wrapper<T>(T);
+
+impl<T: Value + std::fmt::Debug> Value for Wrapper<T> {
+    fn generate() -> Self {
+        Wrapper(T::generate())
+    }
+}
+
+#[alchemist(Wrapper<i32>)]
+fn test_generic_type(w: Wrapper<i32>) {
+    let _ = w.0;
+}
