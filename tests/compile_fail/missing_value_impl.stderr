@@ -1,0 +1,21 @@
+error[E0277]: the trait bound `NoValueImpl: Value` is not satisfied
+ --> tests/compile_fail/missing_value_impl.rs:9:14
+  |
+9 |     let _ = <NoValueImpl as Value>::generate();
+  |              ^^^^^^^^^^^ unsatisfied trait bound
+  |
+help: the trait `Value` is not implemented for `NoValueImpl`
+ --> tests/compile_fail/missing_value_impl.rs:4:1
+  |
+4 | struct NoValueImpl {
+  | ^^^^^^^^^^^^^^^^^^
+  = help: the following other types implement trait `Value`:
+            String
+            bool
+            char
+            f32
+            f64
+            i128
+            i16
+            i32
+          and $N others

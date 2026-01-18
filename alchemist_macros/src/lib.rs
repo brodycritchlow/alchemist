@@ -125,7 +125,7 @@ fn generate_type_expr(expr: &TypeExpr) -> proc_macro2::TokenStream {
 
         _ => {
             let path = &expr.path;
-            quote! { <#path as alchemist::Value>::generate()}
+            quote! { <#path as alchemist::Value>::generate() }
         }
     }
 }

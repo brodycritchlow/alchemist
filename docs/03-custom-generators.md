@@ -19,6 +19,8 @@ Custom types must implement both `Value` and `Debug`. The `Debug` requirement en
 ## Custom Structs
 
 ```rust
+use alchemist::{alchemist, Value};
+
 #[derive(Debug)]
 struct Point {
     x: i32,
@@ -43,6 +45,8 @@ fn test_point(p: Point) {
 ## Custom Enums
 
 ```rust
+use alchemist::{alchemist, Value};
+
 #[derive(Debug, Clone, Copy)]
 enum Direction {
     North,
@@ -103,10 +107,12 @@ fn test_rectangle(rect: geometry::Rectangle) {
 Generic types work if you provide a blanket implementation:
 
 ```rust
+use alchemist::{alchemist, Value};
+
 #[derive(Debug)]
 struct Wrapper<T>(T);
 
-impl<T: Value + std::fmt::Debug> Value for Wrapper<T> {
+impl<T: Value> Value for Wrapper<T> {
     fn generate() -> Self {
         Wrapper(T::generate())
     }

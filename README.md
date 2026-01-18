@@ -23,6 +23,8 @@ Alchemist is **brand-new**, which means it is not ready for production usage and
 History of Alchemist below:
 
 - Started work on Janurary 2026.
+- Added custom generator support with path and generic type handling.
+    - The `Value` trait now requires `Debug`. Types implementing `Value` must also implement `Debug` (e.g., `#[derive(Debug)]`).
 
 ## Documentation / User Guides
 

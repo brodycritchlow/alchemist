@@ -1,0 +1,17 @@
+error[E0277]: `NoDebugImpl` doesn't implement `Debug`
+ --> tests/compile_fail/missing_debug_impl.rs:7:16
+  |
+7 | impl Value for NoDebugImpl {
+  |                ^^^^^^^^^^^ the trait `Debug` is not implemented for `NoDebugImpl`
+  |
+  = note: add `#[derive(Debug)]` to `NoDebugImpl` or manually `impl Debug for NoDebugImpl`
+note: required by a bound in `Value`
+ --> src/generators/mod.rs
+  |
+  | pub trait Value: std::fmt::Debug {
+  |                  ^^^^^^^^^^^^^^^ required by this bound in `Value`
+help: consider annotating `NoDebugImpl` with `#[derive(Debug)]`
+  |
+3 + #[derive(Debug)]
+4 | struct NoDebugImpl {
+  |

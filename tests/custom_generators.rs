@@ -150,7 +150,7 @@ fn test_list_of_path_type(rects: Vec<geometry::Rectangle>) {
 #[derive(Debug)]
 struct Wrapper<T>(T);
 
-impl<T: Value + std::fmt::Debug> Value for Wrapper<T> {
+impl<T: Value> Value for Wrapper<T> {
     fn generate() -> Self {
         Wrapper(T::generate())
     }
@@ -159,4 +159,58 @@ impl<T: Value + std::fmt::Debug> Value for Wrapper<T> {
 #[alchemist(Wrapper<i32>)]
 fn test_generic_type(w: Wrapper<i32>) {
     let _ = w.0;
+}
+
+mod outer {
+    pub mod middle {
+        pub mod inner {
+            use alchemist::Value;
+
+            #[derive(Debug)]
+            pub struct DeepType {
+                pub value: i32,
+            }
+
+            impl Value for DeepType {
+                fn generate() -> Self {
+                    DeepType {
+                        value: i32::generate(),
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[alchemist(outer::middle::inner::DeepType)]
+fn test_deeply_nested_path(d: outer::middle::inner::DeepType) {
+    let _ = d.value;
+}
+
+#[derive(Debug)]
+struct Pair<A, B> {
+    first: A,
+    second: B,
+}
+
+impl<A: Value, B: Value> Value for Pair<A, B> {
+    fn generate() -> Self {
+        Pair {
+            first: A::generate(),
+            second: B::generate(),
+        }
+    }
+}
+
+#[alchemist(Pair<i32, bool>)]
+fn test_multiple_type_params(p: Pair<i32, bool>) {
+    let _ = p.first;
+    let _ = p.second;
+}
+
+#[alchemist(Pair<String, Pair<i32, bool>>)]
+fn test_nested_generic_types(p: Pair<String, Pair<i32, bool>>) {
+    let _ = p.first;
+    let _ = p.second.first;
+    let _ = p.second.second;
 }
